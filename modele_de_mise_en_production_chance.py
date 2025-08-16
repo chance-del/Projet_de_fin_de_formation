@@ -139,9 +139,36 @@ st.markdown("""
 # ==========================================
 # 1. Charger le modèle MLP sauvegardé
 # ==========================================
+import joblib
+import zipfile
+import os
+import tempfile
+import streamlit as st
+
 @st.cache_resource
 def load_model():
-    return joblib.load(r"C:\Users\NICK-TECH\Documents\mlp_pipeline_model.pkl")
+    zip_path = "mlp_pipeline_model.zip"  # ton fichier zippé (placé dans ton repo GitHub)
+    
+    # Décompresser dans un dossier temporaire
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        temp_dir = tempfile.mkdtemp()
+        zip_ref.extractall(temp_dir)
+
+    # Chercher le .pkl dans le zip
+    model_path = None
+    for root, dirs, files in os.walk(temp_dir):
+        for file in files:
+            if file.endswith(".pkl"):
+                model_path = os.path.join(root, file)
+                break
+    
+    if model_path is None:
+        raise FileNotFoundError("Aucun fichier .pkl trouvé dans le ZIP.")
+    
+    # Charger le modèle avec joblib
+    model = joblib.load(model_path)
+    return model
+
 
 pipeline = load_model()
 
@@ -268,3 +295,4 @@ elif page == "Prédiction multiple":
                 file_name="predictions_clients.csv",
                 mime="text/csv"
             )
+
