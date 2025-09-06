@@ -147,7 +147,7 @@ import streamlit as st
 
 @st.cache_resource
 def load_model():
-    zip_path = "mlp_pipeline_model.zip"  # ton fichier zippé (placé dans ton repo GitHub)
+    zip_path = "mlp_pipeline_model2.zip"  # ton fichier zippé (placé dans ton repo GitHub)
     
     # Décompresser dans un dossier temporaire
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
@@ -295,4 +295,5 @@ elif page == "Prédiction multiple":
                 file_name="predictions_clients.csv",
                 mime="text/csv"
             )
+
 
